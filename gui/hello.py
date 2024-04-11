@@ -17,28 +17,44 @@ class MainGridLayout(GridLayout):
 
 
     def __init__(self, **kwargs):
+
+        self.cols = 1
+
+        self.top_grid = GridLayout(
+            row_force_default= True,
+            row_default_height = 60
+        )
+        self.top_grid.cols = 2
+
         super(MainGridLayout, self).__init__(**kwargs)
 
         self.name_label = Label(text="Qual seu nome?")
-        self.add_widget(self.name_label)
+        self.top_grid.add_widget(self.name_label)
         
         self.name_input = TextInput(multiline = False)
-        self.add_widget(self.name_input)
+        self.top_grid.add_widget(self.name_input)
 
         self.birth_label = Label(text="Em qual ano você nasceu?")
-        self.add_widget(self.birth_label)
+        self.top_grid.add_widget(self.birth_label)
 
         self.birth_input = NumericInput(multiline = False)
-        self.add_widget(self.birth_input)
+        self.top_grid.add_widget(self.birth_input)
 
-        self.submit_button = Button(text="Enviar", font_size=32)
+        self.add_widget(self.top_grid)
+
+        self.submit_button = Button(
+            text="Fazer cálculos", 
+            font_size=32,
+            size_hint_y = None,
+            height= 50
+        )
         self.submit_button.bind(on_press=self.press)
         self.add_widget(self.submit_button)
 
         self.text_message = Label()
         self.add_widget(self.text_message)
 
-        self.cols = 2
+        
 
 
     def press(self, instance):
@@ -49,9 +65,9 @@ class MainGridLayout(GridLayout):
             return
         else:
             if int(birth)> 1999:
-                self.text_message.text = f"{name}, infelizmente você é NUTELLA :("
+                self.text_message.text = f"Olá, {name}! Infelizmente, você é NUTELLA :("
             else:
-                self.text_message.text = f"Parabéns, {name}, você não é nutella"
+                self.text_message.text = f"Olá, {name}! Parabéns, você não é nutella!"
         
 
 class MyApp(App):
