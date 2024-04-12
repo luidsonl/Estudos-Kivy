@@ -1,0 +1,27 @@
+<MainGridLayout>:
+    cols: 1
+    name:name
+    birth:birth
+    
+    GridLayout:
+        cols: 2
+
+        Label:
+            text:'Qual seu nome'
+        TextInput:
+            id: name
+            multiline: False
+
+        Label:
+            text:'Em qual ano você nasceu?'
+        NumericInput:
+            id: birth
+            multiline: False
+
+    Button:
+        text: 'Fazer cálculos'
+        font_size: 32
+        on_press: root.press()
+
+    Label:
+        text: root.answer
