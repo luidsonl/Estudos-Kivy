@@ -1,0 +1,7 @@
+# Arquivos de compilação
+*.o
+*.out
+*.pyc
+
+# Diretório do ambiente virtual Python
+myenv/
