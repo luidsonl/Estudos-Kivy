@@ -1,0 +1,82 @@
+#:import CalcInput widgets.CalcInput
+#:import CalcKey widgets.CalcKey
+
+<Calc>:
+    orientation: 'vertical'
+
+    CalcInput:
+        id: calc_input
+        text: '0'
+        
+
+    GridLayout:
+        cols: 4
+        rows: 5
+        
+        # Row
+        CalcKey:
+            text: '%'
+
+        CalcKey:
+            text: 'CE'
+
+        CalcKey:
+            id: clear
+            text: 'C'
+            on_press: root.clear()
+
+        CalcKey:
+            text: '/'
+
+        # Row
+        CalcKey:
+            text: '7'
+
+        CalcKey:
+            text: '8'
+
+        CalcKey:
+            text: '9'
+
+        CalcKey:
+            text: 'X'
+
+        # Row
+        CalcKey:
+            text: '4'
+
+        CalcKey:
+            text: '6'
+
+        CalcKey:
+            text: '5'
+
+        CalcKey:
+            text: '-'
+
+        # Row
+        CalcKey:
+            text: '1'
+
+        CalcKey:
+            text: '2'
+
+        CalcKey:
+            text: '3'
+
+        CalcKey:
+            text: '+'
+
+        # Row
+        CalcKey:
+            text: '+/-'
+
+        CalcKey:
+            text: '0'
+
+        CalcKey:
+            text: '.'
+
+        CalcKey:
+            text: '='
+    
