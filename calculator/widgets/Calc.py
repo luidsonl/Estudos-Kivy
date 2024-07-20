@@ -1,6 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-import re
+import sys
+sys.setrecursionlimit(10000)
 
 
 class Calc(BoxLayout):
@@ -68,6 +69,94 @@ class Calc(BoxLayout):
     def back(self):
         self.register = self.register[:-1]
         self.update_input()
+
+    def parse_elements(self):
+        operation = []
+
+        element = ''
+        for char in self.register:
+            if char not in ['/','*','-','+', '%']:
+                element += char
+            else:
+                operation.append(element)
+                element = ''
+                operation.append(char)
+
+        operation.append(element)
+        return operation
+
+    def perform_operation(self, operation: list):
+        operation_length = len(operation)
+
+        if operation_length == 1:
+            return operation[0]
+
+        for i, element in enumerate(operation):
+            if element == '*':
+                if (i + 1) >= operation_length or i == 0:
+                    operation.pop(i)
+                    return self.perform_operation(operation)
+                
+                operation[i] = float(operation[i-1]) * float(operation[i+1])
+                operation.pop(i+1)
+                operation.pop(i-1)
+                return self.perform_operation(operation)
+        
+
+        for i, element in enumerate(operation):
+            if element == '/':
+                if (i + 1) >= operation_length or i == 0:
+                    operation.pop(i)
+                    return self.perform_operation(operation)
+                
+                operation[i] = float(operation[i-1]) / float(operation[i+1])
+                operation.pop(i+1)
+                operation.pop(i-1)
+                return self.perform_operation(operation)
+
+
+        for i, element in enumerate(operation):
+            if element == '%':
+                operation[i] = float(operation[i-1]) / 100
+                operation.pop(i-1)
+                return self.perform_operation(operation)
+
+        for i, element in enumerate(operation):
+            if element == '-':
+                if (i + 1) >= operation_length:
+                    operation.pop(i)
+                    return self.perform_operation(operation)
+                
+                if i == 0:
+                    operation.pop(i)
+                    operation[i+1] = operation[i+1] + '-'
+                    return self.perform_operation(operation)
+                
+                operation[i] = float(operation[i-1]) - float(operation[i+1])
+                operation.pop(i+1)
+                operation.pop(i-1)
+                return self.perform_operation(operation)
+
+
+        for i, element in enumerate(operation):
+            if element == '+':
+                if (i + 1) >= operation_length:
+                    operation.pop(i)
+                    return self.perform_operation(operation)
+                
+                operation[i] = float(operation[i-1]) + float(operation[i+1])
+                operation.pop(i+1)
+                operation.pop(i-1)
+                return self.perform_operation(operation)
+
+
+    def calculate(self):
+        operation = self.parse_elements()
+        result = str(self.perform_operation(operation))
+        self.update_register(result)
+        self.update_input()
+
+
 
     def button_click(self, value):
         if value == 'X':
