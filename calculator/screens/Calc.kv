@@ -1,82 +1,123 @@
-#:import CalcInput widgets.CalcInput
-#:import CalcKey widgets.CalcKey
+<NumericKey@Button>:
+    size_hint: (0.2, 0.2)
+    font_size: 32
+    on_press: app.root.button_click(self.text)
+
+<ArithmeticKey@Button>:
+    size_hint: (0.2, 0.2)
+    font_size: 32
+    on_press: app.root.button_click(self.text)
+
+<ClearKey@Button>:
+    size_hint: (0.2, 0.2)
+    font_size: 32
+    on_press: app.root.clear()
+    background_color: (1, 0.8, 0.8)
+
+<BackspaceKey@Button>:
+    size_hint: (0.2, 0.2)
+    font_size: 32
+    on_press: app.root.back()
+    background_color: (1, 0.8, 0.8)
+
+
+<EqualsKey@Button>:
+    size_hint: (0.2, 0.2)
+    font_size: 32
+    on_press: app.root.clear()
+    background_color: (0.2, 1, 0.2)
+
+
+<NumericInput@TextInput>:
+    text: ''
+    hint_text: '0'
+    halign: 'right'
+    font_size: 65
+    size_hint: (1, 0.2)
+    on_text: app.root.validate_input(self, self.text)
+    multiline: False
+    
 
 <Calc>:
     orientation: 'vertical'
 
-    CalcInput:
+
+    NumericInput:
         id: calc_input
-        text: '0'
-        
 
     GridLayout:
         cols: 4
         rows: 5
         
         # Row
-        CalcKey:
+        ArithmeticKey:
             text: '%'
 
-        CalcKey:
-            text: 'CE'
+        BackspaceKey:
+            text: 'Back'
 
-        CalcKey:
-            id: clear
-            text: 'C'
-            on_press: root.clear()
+        ClearKey:
+            text: 'Clear'
 
-        CalcKey:
+        ArithmeticKey:
             text: '/'
 
         # Row
-        CalcKey:
+        NumericKey:
             text: '7'
 
-        CalcKey:
+        NumericKey:
             text: '8'
 
-        CalcKey:
+        NumericKey:
             text: '9'
 
-        CalcKey:
+        ArithmeticKey:
             text: 'X'
 
         # Row
-        CalcKey:
+        NumericKey:
             text: '4'
 
-        CalcKey:
+        NumericKey:
             text: '6'
 
-        CalcKey:
+        NumericKey:
             text: '5'
 
-        CalcKey:
+        ArithmeticKey:
             text: '-'
 
         # Row
-        CalcKey:
+        NumericKey:
             text: '1'
 
-        CalcKey:
+        NumericKey:
             text: '2'
 
-        CalcKey:
+        NumericKey:
             text: '3'
 
-        CalcKey:
+        ArithmeticKey:
             text: '+'
 
         # Row
-        CalcKey:
-            text: '+/-'
 
-        CalcKey:
+    GridLayout:
+        cols: 3
+        rows: 1
+        size_hint_y: 0.2
+
+        NumericKey:
             text: '0'
+            size_hint_x: 0.25
 
-        CalcKey:
+        NumericKey:
             text: '.'
+            size_hint_x: 0.25
 
-        CalcKey:
+        EqualsKey:
             text: '='
+            size_hint_x: 0.5
+
     
