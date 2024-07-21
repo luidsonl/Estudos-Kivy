@@ -21,35 +21,42 @@ class Calc(BoxLayout):
         for i, char in enumerate(self.register):
             if i == 0:
                 if char in ['0','1','2','3','4','5','6','7','8','9','-']:
-                    sanitized_register += char
+                    sanitized_register.append(char)
                 continue
 
             if char in['0','1','2','3','4','5','6','7','8','9']:
-                if sanitized_register[-1] =='%':
+                if sanitized_register[-1] == '%':
                     continue
-                sanitized_register += char
+                sanitized_register.append(char)
                 continue
 
-            if char in ['.', '%']:
-                flag = True
-                for i, s_char in enumerate(sanitized_register):
-                    if s_char in ['.','/','*','-','+', '%']:
-                        flag = False
+            if char in ['.']:
+                flag = False
+                for s_char in reversed(sanitized_register):
+                    if s_char in ['/','*','-','+']:
+                        break
                     if s_char in ['0','1','2','3','4','5','6','7','8','9']:
-                        if sanitized_register[i-1] in ['/','*','-','+']:
-                            flag = True
+                        flag = True
+                    if s_char in ['.', '%']:
+                        flag = False
+                        break
 
                 if flag:
-                    sanitized_register += char
+                    sanitized_register.append(char)
                     continue
 
+            if char in ['%']:
+                if sanitized_register[-1] in ['0','1','2','3','4','5','6','7','8','9']:
+                    sanitized_register.append(char)
+                    continue
 
+            
             if (sanitized_register[-1] in ['/','*','-','+', '.'] and char in ['/','*','-','+']):
                 sanitized_register[-1] = char
                 continue
             
             if char in ['/','*','-','+']:
-                sanitized_register += char
+                sanitized_register.append(char)
                 continue
         
         self.register = ''.join(sanitized_register)
