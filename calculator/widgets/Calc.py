@@ -95,51 +95,53 @@ class Calc(BoxLayout):
         return operation
 
     def perform_operation(self, operation: list):
+        print(operation)
         operation_length = len(operation)
-
-        if operation_length == 1:
-            return operation[0]
-
-        for i, element in enumerate(operation):
-            if element == '*':
-                if (i + 1) >= operation_length or i == 0:
-                    operation.pop(i)
-                    return self.perform_operation(operation)
-                
-                operation[i] = float(operation[i-1]) * float(operation[i+1])
-                operation.pop(i+1)
-                operation.pop(i-1)
-                return self.perform_operation(operation)
+        if not operation:
+            return 0
         
 
-        for i, element in enumerate(operation):
-            if element == '/':
-                if (i + 1) >= operation_length or i == 0:
-                    operation.pop(i)
-                    return self.perform_operation(operation)
-                
-                operation[i] = float(operation[i-1]) / float(operation[i+1])
-                operation.pop(i+1)
-                operation.pop(i-1)
-                return self.perform_operation(operation)
-
-
+        if operation_length == 1:
+            return round(float(operation[0]),10)
+        
         for i, element in enumerate(operation):
             if element == '%':
-                operation[i] = float(operation[i-1]) / 100
-                operation.pop(i-1)
+                operation[i] =  '/'
+                operation.insert( i + 1 , '100')
                 return self.perform_operation(operation)
 
+        for i, element in enumerate(operation):
+            if element in ['*', '/']:
+                if element == '*':
+                    if (i + 1) >= operation_length or i == 0:
+                        operation.pop(i)
+                        return self.perform_operation(operation)
+                    
+                    operation[i] = float(operation[i-1]) * float(operation[i+1])
+                    operation.pop(i+1)
+                    operation.pop(i-1)
+                    return self.perform_operation(operation)
+                
+                if element == '/':
+                    try:
+                        if (i + 1) >= operation_length or i == 0:
+                            operation.pop(i)
+                            return self.perform_operation(operation)
+                        
+                        operation[i] = float(operation[i-1]) / float(operation[i+1])
+                        operation.pop(i+1)
+                        operation.pop(i-1)
+                        return self.perform_operation(operation)
+                    except:
+                        return 0
+        
+            
         for i, element in enumerate(operation):
             if element == '-':
                 if (i + 1) >= operation_length:
                     operation.pop(i)
                     return self.perform_operation(operation)
                 
-                if i == 0:
-                    operation.pop(i)
-                    operation[i+1] = operation[i+1] + '-'
-                    return self.perform_operation(operation)
                 
                 operation[i] = float(operation[i-1]) - float(operation[i+1])
                 operation.pop(i+1)
@@ -161,7 +163,10 @@ class Calc(BoxLayout):
 
     def calculate(self):
         operation = self.parse_elements()
-        result = str(self.perform_operation(operation))
+        result = self.perform_operation(operation)
+        result = "{:.10f}".format(result)
+        if '.' in result:
+            result = result.rstrip('0').rstrip('.')
         self.update_register(result)
         self.update_input()
 
