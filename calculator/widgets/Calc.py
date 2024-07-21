@@ -85,11 +85,13 @@ class Calc(BoxLayout):
             if char not in ['/','*','-','+', '%']:
                 element += char
             else:
-                operation.append(element)
+                if element:
+                    operation.append(element)
                 element = ''
                 operation.append(char)
 
-        operation.append(element)
+        if element:
+            operation.append(element)
         return operation
 
     def perform_operation(self, operation: list):
