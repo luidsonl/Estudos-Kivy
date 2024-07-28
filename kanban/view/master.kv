@@ -1,6 +1,37 @@
+#:import Kanban view.kanban.Kanban
+
 <Master>:
     do_default_tab: False
 
-    Kanban:
+    TabbedPanelItem:
+        text: 'Kanban'
+        Kanban:
+            KanbanBody:
+                KanbanHeader:
+                    Label:
+                        text: 'To do'
+                        size_hint_y: None
+                        height: 50
 
-    Calendar:
+                    Label:
+                        text: 'Doing'
+                        size_hint_y: None
+                        height: 50
+
+                    Label:
+                        text: 'Done'
+                        size_hint_y: None
+                        height: 50
+
+                KanbanContent:
+                    KanbanToDo:
+
+                    KanbanDoing:
+
+                    KanbanDone:
+
+
+    TabbedPanelItem:
+        text: 'Calendar'
+        Label:
+            text: 'Calendar'

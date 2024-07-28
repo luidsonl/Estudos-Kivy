@@ -2,5 +2,8 @@
 *.o
 *.out
 
+# Arquivos de cache
+*__pycache__
+
 # Diretório do ambiente virtual Python
 myenv/
