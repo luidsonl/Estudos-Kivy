@@ -1,7 +1,11 @@
+from kivy.app import App
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
 from kivy.lang import Builder
+
+from model.kanbanItem import KanbanItem
 
 class Kanban(ScrollView):
 
@@ -42,6 +46,14 @@ class KanbanToDo(BoxLayout):
         self.spacing = 10
         self.size_hint_y = None
 
+        kanban_controller = App.get_running_app().kanban_controller
+
+        for item in kanban_controller.items:
+            if item.state == 'todo':
+                card = KanbanCard(item)
+                self.add_widget(card)
+
+
 class KanbanDoing(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -55,3 +67,19 @@ class KanbanDone(BoxLayout):
         self.orientation = 'vertical'
         self.spacing = 10
         self.size_hint_y = None
+
+class KanbanCard(BoxLayout):
+    def __init__(self, kanban_item: KanbanItem, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+        self.spacing = 10
+        self.size_hint_y = None
+        self.height = 100
+
+        title = Label(text=kanban_item.title)
+        created_at = Label(text=str(kanban_item.created_at))
+        due_date = Label(text=str(kanban_item.due_date))
+
+        self.add_widget(title)
+        self.add_widget(created_at)
+        self.add_widget(due_date)

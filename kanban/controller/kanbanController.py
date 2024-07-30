@@ -1,5 +1,5 @@
 from datetime import date
-from model.kanbanCard import KanbanCard
+from model.kanbanItem import KanbanItem
 from model.taskStateEnum import TaskStateEnum
 
 from kivy.uix.tabbedpanel import TabbedPanel
@@ -7,19 +7,19 @@ from kivy.uix.tabbedpanel import TabbedPanel
 
 class KanbanController:
     def __init__(self):
-        self.cards = []
+        self.items = []
 
-    def add_card(self, title: str, created_at :date, due_date: date, state: TaskStateEnum):
-        card = KanbanCard(title, created_at, due_date, state)
-        self.cards.append(card)
+    def add_item(self, title: str, created_at :date, due_date: date, state: TaskStateEnum):
+        item = KanbanItem(title, created_at, due_date, state)
+        self.items.append(item)
 
-    def remove_card(self, card_id: int):
-        self.cards = [card for card in self.cards if card.id != card_id]
+    def remove_item(self, item_id: int):
+        self.items = [item for item in self.items if item.id != item_id]
 
-    def edit_card_state(self, card_id: int, new_state: TaskStateEnum):
+    def edit_item_state(self, item_id: int, new_state: TaskStateEnum):
 
-        for card in self.cards:
-            if card.id == card_id:
-                card.state = new_state
+        for item in self.items:
+            if item.id == item_id:
+                item.state = new_state
                 break
     

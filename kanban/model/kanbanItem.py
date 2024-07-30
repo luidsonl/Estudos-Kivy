@@ -3,7 +3,7 @@ from model.taskStateEnum import TaskStateEnum
 
 
 
-class KanbanCard:
+class KanbanItem:
     id = 1
     title = ''
     created_at =''
@@ -11,8 +11,8 @@ class KanbanCard:
     state = ''
 
     def __init__(self, title: str, created_at: date, due_date: date, state: TaskStateEnum) -> None:
-        self.id = KanbanCard.id
-        KanbanCard.id += 1
+        self.id = KanbanItem.id
+        KanbanItem.id += 1
 
         self.title = title
         self.created_at = created_at
