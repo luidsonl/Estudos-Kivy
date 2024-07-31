@@ -25,6 +25,67 @@ class Main(App):
             due_date=date(2024, 8, 15),
             state="todo"
         )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
+        self.kanban_controller.add_item(
+            title='Implementar login',
+            created_at=date(2024, 7, 30),
+            due_date=date(2024, 8, 15),
+            state="todo"
+        )
 
         self.kanban_controller.add_item(
             title='Design do dashboard',

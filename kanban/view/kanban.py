@@ -17,11 +17,14 @@ class Kanban(ScrollView):
         self.do_scroll_y = True
         self.padding = [10, 30, 10, 10]
 
+        
+
 class KanbanBody(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.rows = 2
-        self.size_hint_y = (None)
+        self.size_hint_y = None
+        self.height = self.minimum_height
 
 class KanbanHeader(GridLayout):
     def __init__(self, **kwargs):
@@ -39,12 +42,12 @@ class KanbanContent(GridLayout):
         self.size_hint_y = None
         self.height = self.minimum_height
 
-class KanbanToDo(BoxLayout):
+class KanbanToDo(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = 'vertical'
+        self.cols = 1
         self.spacing = 10
-        self.size_hint_y = None
+        
 
         kanban_controller = App.get_running_app().kanban_controller
 
@@ -54,19 +57,31 @@ class KanbanToDo(BoxLayout):
                 self.add_widget(card)
 
 
-class KanbanDoing(BoxLayout):
+class KanbanDoing(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = 'vertical'
+        self.cols = 1
         self.spacing = 10
-        self.size_hint_y = None
 
-class KanbanDone(BoxLayout):
+        kanban_controller = App.get_running_app().kanban_controller
+
+        for item in kanban_controller.items:
+            if item.state == 'doing':
+                card = KanbanCard(item)
+                self.add_widget(card)
+
+class KanbanDone(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = 'vertical'
+        self.cols = 1
         self.spacing = 10
-        self.size_hint_y = None
+
+        kanban_controller = App.get_running_app().kanban_controller
+
+        for item in kanban_controller.items:
+            if item.state == 'done':
+                card = KanbanCard(item)
+                self.add_widget(card)
 
 class KanbanCard(BoxLayout):
     def __init__(self, kanban_item: KanbanItem, **kwargs):
