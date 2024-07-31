@@ -24,7 +24,10 @@ class KanbanBody(GridLayout):
         super().__init__(**kwargs)
         self.rows = 2
         self.size_hint_y = None
-        self.height = self.minimum_height
+
+        kanban_controller = App.get_running_app().kanban_controller
+
+        self.height = len(kanban_controller.items) * 100
 
 class KanbanHeader(GridLayout):
     def __init__(self, **kwargs):
