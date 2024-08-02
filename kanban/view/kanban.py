@@ -32,7 +32,7 @@ class KanbanBody(GridLayout):
 
         kanban_controller = App.get_running_app().kanban_controller
 
-        self.height = len(kanban_controller.items) * 100
+        self.height = len(kanban_controller.items) * 100 + 50
 
 class KanbanHeader(GridLayout):
     def __init__(self, **kwargs):
@@ -64,7 +64,7 @@ class KanbanToDo(GridLayout):
                 card = KanbanCard(item)
                 self.add_widget(card)
 
-        new_kanban_button = Button(text="New Task", size_hint_y = None, height = 100)
+        new_kanban_button = Button(text="New Task", size_hint_y = None, height = 50)
         new_kanban_button.bind(on_press=self.show_popup)
         self.add_widget(new_kanban_button)
 
@@ -129,8 +129,12 @@ class NewKanbanForm(Popup):
         self.title_input = TextInput(hint_text='Title')
         layout.add_widget(self.title_input)
 
+        layout.add_widget(Label(text='Created at'))
+
         self.created_at_input = DateTimeInput(hint_text='YYYY-MM-DD')
         layout.add_widget(self.created_at_input)
+
+        layout.add_widget(Label(text='Due date'))
 
         self.due_date_input = DateTimeInput(hint_text='YYYY-MM-DD')
         layout.add_widget(self.due_date_input)
@@ -155,14 +159,17 @@ class NewKanbanForm(Popup):
 
 class DateTimeInput(TextInput):
     def __init__(self, **kwargs):
+        if 'text' not in kwargs:
+            kwargs['text'] = datetime.now().strftime("%Y-%m-%d")
         super(DateTimeInput, self).__init__(**kwargs)
         self.bind(focus=self.on_focus)
+        self.text
 
     def insert_text(self, substring, from_undo=False):
         if substring.isdigit() or substring in "- ":
             new_text = self.text + substring
             new_text = self.format_input(new_text)
-            if len(new_text) <= 10:  # Limita o comprimento da entrada para a data
+            if len(new_text) <= 10:
                 self.text = new_text
                 self.cursor = (len(self.text), 0)
 
@@ -185,23 +192,25 @@ class DateTimeInput(TextInput):
         return formatted + text
 
     def format_date(self, text):
-        # Filtra apenas dígitos do texto
         text = ''.join(filter(str.isdigit, text))
+        DEFAULT_DATE = datetime.today()
 
-        # Define os valores padrão
         defaults = {
-            'year': '1000',
+            'year': '2024',
             'month': '01',
             'day': '01'
         }
         
-        # Divide o texto em partes
         year = text[:4].rjust(4, '0') or defaults['year']
         month = text[4:6].rjust(2, '0') or defaults['month']
         day = text[6:8].rjust(2, '0') or defaults['day']
 
-        # Formata a data
-        formatted = f"{year}-{month}-{day}"
+        try:
+            date = datetime(int(year), int(month), int(day))
+        except ValueError:
+            date = DEFAULT_DATE
+
+        formatted = date.strftime("%Y-%m-%d")
         
         return formatted
 
@@ -210,6 +219,9 @@ class DateTimeInput(TextInput):
 
         text = text.replace(' ', 'T')
         year, month, day = int(text[:4]), int(text[5:7]), int(text[8:10])
+
+        if day < 1:
+            day = 1
         
         if month > 12:
             month = 12
