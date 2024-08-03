@@ -4,9 +4,12 @@
     do_default_tab: False
 
     TabbedPanelItem:
+        id: kanban_panel
         text: 'Kanban'
         Kanban:
+            id: kanban_item
             KanbanBody:
+                id: kanban_body
                 KanbanHeader:
                     Label:
                         text: 'To do'
@@ -24,6 +27,7 @@
                         height: 50
 
                 KanbanContent:
+                    id: kanban_content
                     KanbanToDo:
 
                     KanbanDoing:

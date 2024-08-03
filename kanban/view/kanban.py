@@ -9,8 +9,10 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from datetime import datetime
 from kivy.uix.button import Button
+from kivy.event import EventDispatcher
 
 from model.kanbanItem import KanbanItem
+from model.taskStateEnum import TaskStateEnum
 
 class Kanban(ScrollView):
 
@@ -49,6 +51,15 @@ class KanbanContent(GridLayout):
         self.spacing = 10
         self.size_hint_y = None
         self.height = self.minimum_height
+
+
+    def update_kanban(self):
+        self.clear_widgets()
+        
+        self.add_widget(KanbanToDo())
+        self.add_widget(KanbanDoing())
+        self.add_widget(KanbanDone())
+        
 
 class KanbanToDo(GridLayout):
     def __init__(self, **kwargs):
@@ -108,21 +119,57 @@ class KanbanCard(BoxLayout):
         self.spacing = 10
         self.size_hint_y = None
         self.height = 100
+        self.id = kanban_item.id
+        self.state = kanban_item.state
 
-        title = Label(text=kanban_item.title)
-        created_at = Label(text=str(kanban_item.created_at))
-        due_date = Label(text=str(kanban_item.due_date))
+        title = Label(text = kanban_item.title)
+        created_at = Label(text =f"start: {kanban_item.created_at.strftime('%Y-%m-%d')}")
+        due_date = Label(text = f"due: {kanban_item.due_date.strftime('%Y-%m-%d')}")
+        switch_button = SwitchButton(self.id, self.state)
+
 
         self.add_widget(title)
         self.add_widget(created_at)
         self.add_widget(due_date)
+        self.add_widget(switch_button)
+
+class SwitchButton(GridLayout):
+    def __init__(self, id:int, state: TaskStateEnum, **kwargs):
+        super().__init__(**kwargs)
+        self.cols = 2
+
+        to_left_button = Button(text='<')
+        to_right_button = Button(text='>')
+
+        if state == 'todo':
+            to_right_button.bind(on_press=lambda f: self.update_state(id=id, new_state='doing'))
+            self.add_widget(to_right_button)
+        
+        elif state == 'doing':
+            to_left_button.bind(on_press=lambda f: self.update_state(id=id, new_state='todo'))
+            self.add_widget(to_left_button)
+
+            to_right_button.bind(on_press=lambda f: self.update_state(id=id, new_state='done'))
+            self.add_widget(to_right_button)
+        
+        elif state == 'done':
+            to_left_button.bind(on_press=lambda f: self.update_state(id=id, new_state='doing'))
+            self.add_widget(to_left_button)
+
+
+    def update_state(self, id: int, new_state: TaskStateEnum):
+
+        app = App.get_running_app()
+        kanban_controller = app.kanban_controller
+        kanban_controller.edit_item_state(id, new_state)
+        app.root.ids.kanban_content.update_kanban()
+
 
 
 class NewKanbanForm(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.title = 'New task'
-        self.id = 'new_kanban_form'
         
         layout = BoxLayout(orientation='vertical')
         
@@ -149,10 +196,17 @@ class NewKanbanForm(Popup):
 
     def submit_new_kanban_form(self, instance):
         title = self.title_input.text
-        created_at = self.created_at_input.text
-        due_date = self.due_date_input.text
+        created_at = datetime.strptime(self.created_at_input.text, "%Y-%m-%d")
+        due_date = datetime.strptime(self.due_date_input.text, "%Y-%m-%d")
 
-        print(f'title: {title}, created {created_at}, due {due_date}')
+        app = App.get_running_app()
+
+        kanban_controller = app.kanban_controller
+
+        kanban_controller.add_item(title, created_at, due_date, 'todo')
+
+        app.root.ids.kanban_content.update_kanban()
+
         
         self.dismiss()
 

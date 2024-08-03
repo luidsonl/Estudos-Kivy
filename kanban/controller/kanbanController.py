@@ -2,7 +2,6 @@ from datetime import date
 from model.kanbanItem import KanbanItem
 from model.taskStateEnum import TaskStateEnum
 
-from kivy.uix.tabbedpanel import TabbedPanel
 
 
 class KanbanController:
