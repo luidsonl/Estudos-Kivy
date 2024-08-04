@@ -21,6 +21,9 @@ class Main(App):
         self.kanban_controller = KanbanController()
             
         return Master()
-
+    
+    def on_stop(self):
+        self.kanban_controller.persist_data()
+        
 if __name__ == '__main__':
     Main().run()

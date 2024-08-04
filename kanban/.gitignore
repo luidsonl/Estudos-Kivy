@@ -1,3 +1,5 @@
+db/*
+
 # Arquivos de compilação
 *.o
 *.out
