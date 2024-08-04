@@ -125,7 +125,7 @@ class KanbanCard(BoxLayout):
         title = Label(text = kanban_item.title)
         created_at = Label(text =f"start: {kanban_item.created_at.strftime('%Y-%m-%d')}")
         due_date = Label(text = f"due: {kanban_item.due_date.strftime('%Y-%m-%d')}")
-        switch_button = SwitchButton(self.id, self.state)
+        switch_button = ActionArea(self.id, self.state)
 
 
         self.add_widget(title)
@@ -133,21 +133,26 @@ class KanbanCard(BoxLayout):
         self.add_widget(due_date)
         self.add_widget(switch_button)
 
-class SwitchButton(GridLayout):
+class ActionArea(GridLayout):
     def __init__(self, id:int, state: TaskStateEnum, **kwargs):
         super().__init__(**kwargs)
-        self.cols = 2
+        self.cols = 3
 
         to_left_button = Button(text='<')
         to_right_button = Button(text='>')
+        delete_button = Button(text='X')
+        delete_button.bind(on_press=lambda f: self.remove_card(id=id))
 
         if state == 'todo':
+            self.add_widget(delete_button)
             to_right_button.bind(on_press=lambda f: self.update_state(id=id, new_state='doing'))
             self.add_widget(to_right_button)
         
         elif state == 'doing':
             to_left_button.bind(on_press=lambda f: self.update_state(id=id, new_state='todo'))
             self.add_widget(to_left_button)
+
+            self.add_widget(delete_button)
 
             to_right_button.bind(on_press=lambda f: self.update_state(id=id, new_state='done'))
             self.add_widget(to_right_button)
@@ -156,12 +161,20 @@ class SwitchButton(GridLayout):
             to_left_button.bind(on_press=lambda f: self.update_state(id=id, new_state='doing'))
             self.add_widget(to_left_button)
 
+            self.add_widget(delete_button)
+
 
     def update_state(self, id: int, new_state: TaskStateEnum):
 
         app = App.get_running_app()
         kanban_controller = app.kanban_controller
         kanban_controller.edit_item_state(id, new_state)
+        app.root.ids.kanban_content.update_kanban()
+
+    def remove_card(self, id: int):
+        app = App.get_running_app()
+        kanban_controller = app.kanban_controller
+        kanban_controller.remove_item(id)
         app.root.ids.kanban_content.update_kanban()
 
 
