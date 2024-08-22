@@ -1,7 +1,5 @@
-
+__pycache__
 *.o
 *.out
-
 myenv/
-
 credentials/*

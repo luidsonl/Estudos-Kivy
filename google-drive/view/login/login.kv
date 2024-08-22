@@ -1,0 +1,18 @@
+#:import AuthButton view.login.auth_button.AuthButton
+
+<LoginScreen@BoxLayout>
+    orientation: 'vertical'
+    padding: [20, 20, 20, 20]
+    spacing: 20
+
+    MDBoxLayout:
+        MDLabel:
+            text: "Autentique-se com sua conta Google"
+            halign: 'center'
+    
+    AuthButton:
+    
+    MDLabel:
+        id: status_label
+        text: "Clique no botão acima para iniciar a autenticação."
+        halign: 'center'
