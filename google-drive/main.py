@@ -1,19 +1,18 @@
-from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
 from repository.google_api_conn import GoogleApiConn
+from view.master import Master
 
-class Master(MDBoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
         
 
 class App(MDApp):
     
     def build(self):
         self.conn = GoogleApiConn()
-        Builder.load_file('view/master.kv')
         return Master()
+    
+    def reload_app(self):
+        self.root.clear_widgets()
+        self.root.add_widget(self.build())
 
 if __name__ == '__main__':
     App().run()
